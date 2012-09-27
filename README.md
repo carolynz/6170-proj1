@@ -1,8 +1,16 @@
-Project 1: Web Analytics
+Project 2: Shopping Cart
 ========================
 
 Full problem description is located at:
-https://stellar.mit.edu/S/course/6/fa12/6.170/courseMaterial/topics/topic2/project/text1/text
+https://stellar.mit.edu/S/course/6/fa12/6.170/courseMaterial/topics/topic2/project/text3/text
+
+###Heroku URL
+
+Please put it here: http://sampleapp.herokuapp.com
+
+###Notes
+
+Any instructions or notes for your grader should be placed here.
 
 
 ###Code Deliverables
