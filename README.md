@@ -1,8 +1,5 @@
-Project 3: Shopping Cart
+Project 1: Web Analytics
 ========================
-
-Full problem description is located at:
-https://stellar.mit.edu/S/course/6/fa12/6.170/courseMaterial/topics/topic2/project/text5/text
 
 ###Heroku URL
 
