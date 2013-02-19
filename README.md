@@ -3,12 +3,11 @@ Project 1: Web Analytics
 
 ###Heroku URL
 
-Please put it here: http://sampleapp.herokuapp.com
+http://warm-beach-8795.herokuapp.com/sites
 
 ###Notes
 
-Any instructions or notes for your grader should be placed here.
-
+Please don't hit your browser's back button on the /visits pages; use the "Back" link instead. The count will not increment otherwise!
 
 ###Code Deliverables
 
