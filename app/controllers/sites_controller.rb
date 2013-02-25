@@ -84,6 +84,7 @@ class SitesController < ApplicationController
   end
 
   def set_cors_headers
+    logger.info "in set_cors_headers"
     headers["Access-Control-Allow-Origin"] = "*"
     headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
     headers["Access-Control-Allow-Headers"] = "Content-Type, Origin, Referer, User-Agent"
@@ -92,7 +93,7 @@ class SitesController < ApplicationController
 
   def visits_preflight
     set_cors_headers
-    logger.info "in sites#visits_preflight method"
+    #logger.info "in sites#visits_preflight method"
     render :text => "", :content_type => "text/plain"
   end
 

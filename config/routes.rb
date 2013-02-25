@@ -61,7 +61,7 @@ CarolynzProj1::Application.routes.draw do
   #match "/sites/:id/visits" => "sites#visits_preflight", :constraints => { :method => "OPTIONS" }
   #match "/sites/:id/visits" => "sites#visits"
 
-  match "/sites/:id/visits" => "sites#visits_preflight", :via => [:options]
+  match "/sites/:id/visits" => "sites#visits_preflight", :constraints => { :method => "OPTIONS" }
   match "/sites/:id/visits" => "sites#visits"
 
   # See how all your routes lay out with "rake routes"
