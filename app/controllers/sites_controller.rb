@@ -102,7 +102,7 @@ class SitesController < ApplicationController
   def visits
     # Send CORS headers
     set_cors_headers
-
+    logger.info "request value: #{request.inspect}"
     logger.info "request.xhr value: #{(request.xhr?).inspect}"
 
     if request.xhr?
