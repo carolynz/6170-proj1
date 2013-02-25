@@ -103,9 +103,9 @@ class SitesController < ApplicationController
     # Send CORS headers
     set_cors_headers
     logger.info "request value: #{request.inspect}"
-    logger.info "request.xhr value: #{(request.xhr?).inspect}"
+    logger.info "request.xhr value: #{(request.xml_http_request?).inspect}"
 
-    if request.xhr?
+    if request.xml_http_request?
       logger.info "Request is xhr"
       @site = Site.find_by_id(params[:id])
 
