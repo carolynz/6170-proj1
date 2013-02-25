@@ -59,13 +59,13 @@ CarolynzProj1::Application.routes.draw do
   root :to => 'home#index'
 
   resources :sites do
-    resources :ads do
-      get 'visits'
-    end
     member do
       get 'visits'
     end
   end
+
+  match "sites/:id/visits" => "sites#visits_preflight", :constraints => { :method => "OPTIONS" }
+  match "sites/:id/visits" => "sites#visits"
 
   # See how all your routes lay out with "rake routes"
 
