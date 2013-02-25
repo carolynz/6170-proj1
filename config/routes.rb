@@ -58,9 +58,7 @@ CarolynzProj1::Application.routes.draw do
   # just remember to delete public/index.html.
   root :to => 'home#index'
 
-  #match "/sites/:id/visits" => "sites#visits_preflight", :constraints => { :method => "OPTIONS" }
-  #match "/sites/:id/visits" => "sites#visits"
-
+  # Route to sites controller's visit_preflight method to determine if origin is allowed to make requests
   match "/sites/:id/visits" => "sites#visits_preflight", :constraints => { :method => "OPTIONS" }
   match "/sites/:id/visits" => "sites#visits"
 

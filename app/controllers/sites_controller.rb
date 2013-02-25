@@ -83,23 +83,26 @@ class SitesController < ApplicationController
     end
   end
 
+  # Called at beginning of visits_preflight and visits
   def set_cors_headers
-    logger.info "in set_cors_headers"
     headers["Access-Control-Allow-Origin"] = "*"
     headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
     headers["Access-Control-Allow-Headers"] = "Content-Type, Origin, Referer, User-Agent"
     headers["Access-Control-Max-Age"] = "3600"
   end
 
+  # Responds to preflight OPTIONS request
   def visits_preflight
+    # Send CORS headers
     set_cors_headers
-    #logger.info "in sites#visits_preflight method"
     render :text => "", :content_type => "text/plain"
   end
 
+  # Called every time a request is made to sites/:id/visits
   def visits
+    # Send CORS headers
     set_cors_headers
-    logger.info "in sites#visits method"
+
     if request.xhr?
       logger.info "Request is xhr"
       @site = Site.find_by_id(params[:id])
@@ -126,39 +129,37 @@ class SitesController < ApplicationController
         @site.save
 
       else
-        logger.info "SITE DOES NOT EXIST. Cancelling operations."
-        #TODO: maybe add an alert of some sort?
+        logger.info "Site of given ID not found. Cancelling operations."
       end
     else
-      logger.info "Request NOT xhr"
-      @site = Site.find_by_id(params[:id])
+      # logger.info "Request NOT xhr"
+      # @site = Site.find_by_id(params[:id])
 
-      # We only want to track visits for sites that we are currently tracking
-      unless @site.nil?
-        logger.info "existing site found!"
-        @page = Page.find_by_url_and_site_id(params[:pageUrl], params[:id])
-        logger.info "Looking for page... is it nil? #{@page.nil?}"
+      # # We only want to track visits for sites that we are currently tracking
+      # unless @site.nil?
+      #   logger.info "existing site found!"
+      #   @page = Page.find_by_url_and_site_id(params[:pageUrl], params[:id])
+      #   logger.info "Looking for page... is it nil? #{@page.nil?}"
         
-        # Create a new page if the visited URL is not yet in our list of tracked pages
-        if @page.nil?
-          @page = Page.new
-          @page.url = params[:pageUrl]
-          @page.site_id = params[:id]
-          logger.info "New page created? #{@page.valid?}"
-        end
+      #   # Create a new page if the visited URL is not yet in our list of tracked pages
+      #   if @page.nil?
+      #     @page = Page.new
+      #     @page.url = params[:pageUrl]
+      #     @page.site_id = params[:id]
+      #     logger.info "New page created? #{@page.valid?}"
+      #   end
 
-        seconds = (params[:duration]).to_i * 0.001
-        # Calculate new average duration
-        @page.register_visit(seconds)
-        @page.save
+      #   seconds = (params[:duration]).to_i * 0.001
+      #   # Calculate new average duration
+      #   @page.register_visit(seconds)
+      #   @page.save
 
-        @site.register_visit(seconds)
-        @site.save
+      #   @site.register_visit(seconds)
+      #   @site.save
 
-      else
-        logger.info "SITE DOES NOT EXIST. Cancelling operations."
-        #TODO: maybe add an alert of some sort?
-      end
+      # else
+      #   logger.info "Site of given ID not found. Cancelling operations."
+      # end
     end
 
     respond_to do |format|
