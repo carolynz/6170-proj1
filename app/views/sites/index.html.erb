@@ -1,0 +1,43 @@
+<h1>Listing sites</h1>
+
+<table>
+  <tr>
+    <th> - Site ID - </th>
+    <th> - Site Name - </th>
+    <th> - Site URL - </th>
+    <th> - Total Visits - </th>
+    <th> - Average Duration - </th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @sites.each do |site| %>
+  <tr>
+    <td><%= site.id %></td>
+    <td><%= site.name %></td>
+    <td><b>Site total</b></td>
+    <td><%= site.totalvisits %></td>
+    <td><%= site.avgduration %> seconds</td>
+    <td><%= link_to 'Show', site %></td>
+    <td><%= link_to 'Edit', edit_site_path(site) %></td>
+    <td><%= link_to 'Destroy', site, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+  <% site.pages.each do |page| %>
+    <tr>
+      <td><%= site.id %></td>
+      <td><%= site.name %></td>
+      <td><%= page.url %></td>
+      <td><%= page.totalvisits %></td>
+      <td><%= page.avgduration %></td>
+      <td><%= link_to 'Show', page %></td>
+      <td><%= link_to 'Edit', edit_page_path(site) %></td>
+      <td><%= link_to 'Destroy', page, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+  <%end %>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Site', new_site_path %>

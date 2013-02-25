@@ -1,0 +1,29 @@
+<h1>Listing pages</h1>
+
+<table>
+  <tr>
+    <th>Site ID</th>
+    <th>URL</th>
+    <th>Total Visits</th>
+    <th>Average Duration</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @pages.each do |page| %>
+  <tr>
+    <td><%= page.site_id %></td>
+    <td><%= page.url %></td>
+    <td><%= page.totalvisits %></td>
+    <td><%= page.avgduration %></td>
+    <td><%= link_to 'Show', page %></td>
+    <td><%= link_to 'Edit', edit_page_path(page) %></td>
+    <td><%= link_to 'Destroy', page, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Page', new_page_path %>

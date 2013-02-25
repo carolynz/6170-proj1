@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  id: 1
+  totalvisits: 1
+  avgduration: 9.99
+
+two:
+  name: MyString
+  id: 1
+  totalvisits: 1
+  avgduration: 9.99
