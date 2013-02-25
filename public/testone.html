@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <script type="text/javascript">
+    var startTime = new Date();        //Record the start time
+    window.onbeforeunload = function()        //When the user leaves the page(closes the window/tab, clicks a link)...
+    {
+        var endTime = new Date();        //Get the current (end) time
+        var duration = Math.abs(endTime - startTime); //difference in milliseconds      
+        var xhr = new XMLHttpRequest();
+        var currentUrl = window.location.pathname.replace(/^.*\/([^/]*)/, "$1");
+        var url = "http://warm-beach-8795.herokuapp.com/sites/4/visits?duration="+duration+"&pageUrl="+currentUrl;
+        xhr.open("GET",url,true);
+        xhr.send();
+    }
+</script>
+    <link href='style.css' rel='stylesheet' type='text/css' />
+    <title>***Website Test***</title>
+    <meta content='Carolyn, Zhang, MIT' name='keywords' />
+    <meta content='Carolyn Zhang' name='author' />
+    <meta content='Personal Website of Carolyn Zhang' name='description' />
+    <meta content='text/html; charset=UTF-8' http-equiv='content-type' />
+  </head>
+  <body>
+    <div id='title'>
+      <div id='one'>
+        <h1>carolyn</h1>
+      </div>
+      <div id='two'>
+        <h1>zhang</h1>
+      </div>
+    </div>
+    <div id='desc'>
+      <h2>Welcome to my corner of the web!</h2>
+      <h3>I'm currently studying computer science at MIT. I like rainbows and unicorns!</h3>
+    </div>
+  </body>
+</html>
