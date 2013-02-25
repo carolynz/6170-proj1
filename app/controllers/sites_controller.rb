@@ -96,25 +96,21 @@ class SitesController < ApplicationController
         @site.name = 'unnamed site'
       end
 
-      #parse the query string parameters
-      qstring = CGI::unescape(request.query_string)
-      page_params = CGI::parse(qstring)
-
       #convert duration from milliseconds to seconds
-      seconds = page_params[:duration] * 0.001
+      seconds = params[:duration] * 0.001
       
 
       #if the page doesn't exist on our analytics tracking site, create a new page instance with 0 visits
-      @page = Page.find(page_params[:pageUrl])
+      @page = Page.find(params[:pageUrl])
       if @page.nil?
         @page = Page.new
-        @page.url = (page_params[:pageUrl])
+        @page.url = (params[:pageUrl])
         @page.site_id = @site.id
       end
 
       
       #call the page's "visit" method to update its average duration and total visits
-      @page.visit(page_params[:pageUrl], seconds)
+      @page.visit(params[:pageUrl], seconds)
 
       #calculate new average duration
       @site.avgduration = ((@site.totalvisits*@site.avgduration) + seconds)/(@site.totalvisits+1)
