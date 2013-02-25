@@ -92,50 +92,77 @@ class SitesController < ApplicationController
 
   def visits_preflight
     set_cors_headers
+    logger.info "in sites#visits_preflight method"
     render :text => "", :content_type => "text/plain"
   end
 
-  # GET /sites/1/visits
-  # GET /sites/1/visits.json
   def visits
     set_cors_headers
+    logger.info "in sites#visits method"
     if request.xhr?
+      logger.info "Request is xhr"
       @site = Site.find_by_id(params[:id])
 
-      #if the site doesn't exist, create a new site instance with 0 visits
-      if @site.nil? 
-        @site = Site.new
-        @site.id = (params[:id])
-        @site.name = 'unnamed site'
+      # Create a new page if the visited URL is not yet in our list of tracked pages
+      unless @site.nil?
+        logger.info "existing site found!"
+        @page = Page.find_by_url_and_site_id(params[:pageUrl], params[:id])
+        logger.info "Looking for page... is it nil? #{@page.nil?}"
+        
+        if @page.nil?
+          @page = Page.new
+          @page.url = params[:pageUrl]
+          @page.site_id = params[:id]
+          logger.info "New page created? #{@page.valid?}"
+        end
+
+        seconds = params[:duration] * 0.001
+        # Calculate new average duration
+        @page.register_visit(seconds)
+        @page.save
+
+        @site.register_visit(seconds)
+        @site.save
+
+      else
+        logger.info "SITE DOES NOT EXIST. Cancelling operations."
+        #TODO: maybe add an alert of some sort?
       end
+    else
+      logger.info "Request NOT xhr"
+      @site = Site.find_by_id(params[:id])
 
-      #convert duration from milliseconds to seconds
-      seconds = params[:duration] * 0.001
-      
+      # We only want to track visits for sites that we are currently tracking
+      unless @site.nil?
+        logger.info "existing site found!"
+        @page = Page.find_by_url_and_site_id(params[:pageUrl], params[:id])
+        logger.info "Looking for page... is it nil? #{@page.nil?}"
+        
+        # Create a new page if the visited URL is not yet in our list of tracked pages
+        if @page.nil?
+          @page = Page.new
+          @page.url = params[:pageUrl]
+          @page.site_id = params[:id]
+          logger.info "New page created? #{@page.valid?}"
+        end
 
-      #if the page doesn't exist on our analytics tracking site, create a new page instance with 0 visits
-      @page = Page.find(params[:pageUrl])
-      if @page.nil?
-        @page = Page.new
-        @page.url = (params[:pageUrl])
-        @page.site_id = @site.id
+        seconds = (params[:duration]).to_i * 0.001
+        # Calculate new average duration
+        @page.register_visit(seconds)
+        @page.save
+
+        @site.register_visit(seconds)
+        @site.save
+
+      else
+        logger.info "SITE DOES NOT EXIST. Cancelling operations."
+        #TODO: maybe add an alert of some sort?
       end
+    end
 
-      
-      #call the page's "visit" method to update its average duration and total visits
-      @page.visit(params[:pageUrl], seconds)
-
-      #calculate new average duration
-      @site.avgduration = ((@site.totalvisits*@site.avgduration) + seconds)/(@site.totalvisits+1)
-      #increment visits
-      @site.totalvisits += 1
-
-      @site.save
-      
-      respond_to do |format|
-        format.html # visits.html.erb
-        format.json { render json: @site }
-      end
+    respond_to do |format|
+      format.html { redirect_to(sites_path) } # redirect to sites page
+      format.json { render json: @page }
     end
   end
 end

@@ -58,12 +58,6 @@ CarolynzProj1::Application.routes.draw do
   # just remember to delete public/index.html.
   root :to => 'home#index'
 
-  resources :sites do
-    member do
-      get 'visits'
-    end
-  end
-
   match "sites/:id/visits" => "sites#visits_preflight", :constraints => { :method => "OPTIONS" }
   match "sites/:id/visits" => "sites#visits"
 

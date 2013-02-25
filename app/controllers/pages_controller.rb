@@ -81,20 +81,4 @@ class PagesController < ApplicationController
     end
   end
 
-  def visit(url, duration)
-    @page = Page.find(url)
-
-    #calculate new average duration
-    @page.avgduration = ((@page.totalvisits)*(@page.avgduration) + duration)/(@page.totalvisits+1)
-    #increment total visits
-    @page.totalvisits += 1
-
-    @page.save
-
-    respond_to do |format|
-        format.html # visit.html.erb
-        format.json { render json: @page }
-    end
-  end
-
 end
