@@ -93,75 +93,43 @@ class SitesController < ApplicationController
 
   # Responds to preflight OPTIONS request
   def visits_preflight
-    # Send CORS headers
     set_cors_headers
     render :text => "", :content_type => "text/plain"
   end
 
   # Called every time a request is made to sites/:id/visits
   def visits
-    # Send CORS headers
     set_cors_headers
-    logger.info "request value: #{request.inspect}"
-    logger.info "request.xhr value: #{(request.xml_http_request?).inspect}"
 
-    if request.xml_http_request?
-      logger.info "Request is xhr"
-      @site = Site.find_by_id(params[:id])
+    @site = Site.find_by_id(params[:id])
 
-      # Create a new page if the visited URL is not yet in our list of tracked pages
-      unless @site.nil?
-        logger.info "existing site found!"
-        @page = Page.find_by_url_and_site_id(params[:pageUrl], params[:id])
-        logger.info "Looking for page... is it nil? #{@page.nil?}"
-        
-        if @page.nil?
-          @page = Page.new
-          @page.url = params[:pageUrl]
-          @page.site_id = params[:id]
-          logger.info "New page created? #{@page.valid?}"
-        end
-
-        seconds = params[:duration] * 0.001
-        # Calculate new average duration
-        @page.register_visit(seconds)
-        @page.save
-
-        @site.register_visit(seconds)
-        @site.save
-
-      else
-        logger.info "Site of given ID not found. Cancelling operations."
+    unless @site.nil?
+      # Only do the following if the site with ID params[:id] is in our list of tracked sites
+      logger.info "Existing site found!"
+      @page = Page.find_by_url_and_site_id(params[:pageUrl], params[:id])
+      
+      if @page.nil?
+        # Create a new page if the visited URL is not yet in our list of tracked pages
+        logger.info "Page with given URL and site ID not found. Creating new Page object to track visits."
+        @page = Page.new
+        @page.url = params[:pageUrl]
+        @page.site_id = params[:id]
+        logger.info "New page created? #{@page.valid?}"
       end
+
+      # Convert params[:duration] from milliseconds to seconds.
+      # params[:duration] is in milliseconds. register_visit methods only take input in seconds.
+      seconds = params[:duration] * 0.001
+      # Let the page register the visit
+      @page.register_visit(seconds)
+      @page.save
+      # Let the site register the visit
+      @site.register_visit(seconds)
+      @site.save
+
     else
-      # logger.info "Request NOT xhr"
-      # @site = Site.find_by_id(params[:id])
-
-      # # We only want to track visits for sites that we are currently tracking
-      # unless @site.nil?
-      #   logger.info "existing site found!"
-      #   @page = Page.find_by_url_and_site_id(params[:pageUrl], params[:id])
-      #   logger.info "Looking for page... is it nil? #{@page.nil?}"
-        
-      #   # Create a new page if the visited URL is not yet in our list of tracked pages
-      #   if @page.nil?
-      #     @page = Page.new
-      #     @page.url = params[:pageUrl]
-      #     @page.site_id = params[:id]
-      #     logger.info "New page created? #{@page.valid?}"
-      #   end
-
-      #   seconds = (params[:duration]).to_i * 0.001
-      #   # Calculate new average duration
-      #   @page.register_visit(seconds)
-      #   @page.save
-
-      #   @site.register_visit(seconds)
-      #   @site.save
-
-      # else
-      #   logger.info "Site of given ID not found. Cancelling operations."
-      # end
+      # Failure path: request's site_id is not an ID of a site we are tracking
+      logger.info "Site with given ID not found. Visit not registered."
     end
 
     respond_to do |format|
