@@ -119,7 +119,7 @@ class SitesController < ApplicationController
 
       # Convert params[:duration] from milliseconds to seconds.
       # params[:duration] is in milliseconds. register_visit methods only take input in seconds.
-      seconds = params[:duration] * 0.001
+      seconds = (params[:duration]).to_i * 0.001
       # Let the page register the visit
       @page.register_visit(seconds)
       @page.save
