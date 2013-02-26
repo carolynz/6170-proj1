@@ -1,41 +1,36 @@
-<h1>Listing sites</h1>
+<div class = "page-header">
+  <h1>Listing sites</h1>
+</div>
 
-<table>
-  <tr>
-    <th> - Site ID - </th>
-    <th> - Site Name - </th>
-    <th> - Site URL - </th>
-    <th> - Total Visits - </th>
-    <th> - Average Duration - </th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @sites.each do |site| %>
-  <tr>
-    <td><%= site.id %></td>
-    <td><%= site.name %></td>
-    <td><b>Site total</b></td>
-    <td><%= site.totalvisits %></td>
-    <td><%= site.avgduration %> seconds</td>
-    <td><%= link_to 'Show', site %></td>
-    <td><%= link_to 'Edit', edit_site_path(site) %></td>
-    <td><%= link_to 'Destroy', site, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-  <% site.pages.each do |page| %>
+<table class = "table table-bordered">
+  <thead>
     <tr>
-      <td><%= site.id %></td>
-      <td><%= site.name %></td>
-      <td><%= page.url %></td>
-      <td><%= page.totalvisits %></td>
-      <td><%= page.avgduration %></td>
-      <td><%= link_to 'Show', page %></td>
-      <td><%= link_to 'Edit', edit_page_path(site) %></td>
-      <td><%= link_to 'Destroy', page, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <th>Site ID</th>
+      <th>Site Name</th>
+      <th>Page URL</th>
+      <th>Total Visits</th>
+      <th>Average Duration</th>
+      <th></th>
     </tr>
-  <%end %>
-<% end %>
+  </thead>
+  <% @sites = Site.order(:id) %>
+  <% @sites.each do |site| %>
+    <tr>
+      <td rowspan="<%= site.pages.count+1 %>"><%= site.id %></td>
+      <td rowspan="<%= site.pages.count+1 %>"><%= site.name %></td>
+      <td> -- </td>
+      <td><%= site.totalvisits %></td>
+      <td><%= site.avgduration %> seconds</td>
+      <td rowspan="<%= site.pages.count+1 %>"><%= link_to 'Get site tracking code', site %></td>
+    </tr>
+    <% site.pages.each do |page| %>
+      <tr class = "pagerow">
+        <td><%= page.url %></td>
+        <td><%= page.totalvisits %></td>
+        <td><%= page.avgduration %></td>
+      </tr>
+    <%end %>
+  <% end %>
 </table>
 
 <br />

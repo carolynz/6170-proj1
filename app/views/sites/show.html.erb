@@ -1,25 +1,38 @@
-<p id="notice"><%= notice %></p>
+<div class = "page-header">
+  <h1>Site stats</h1>
+</div>
 
-<p>
-  <b>Name:</b>
-  <%= @site.name %>
-</p>
+<table class = "table table-bordered">
+  <thead>
+    <tr>
+      <th>Site ID</th>
+      <th>Site Name</th>
+      <th>Total Visits</th>
+      <th>Average Duration</th>
+    </tr>
+  </thead>
+  <tr>
+    <td><%= @site.id %></td>
+    <td><%= @site.name %></td>
+    <td><%= @site.totalvisits %></td>
+    <td><%= @site.avgduration %> seconds</td>
+  </tr>
+</table>
 
-<p>
-  <b>ID:</b>
-  <%= @site.id %>
-</p>
+<p> To start tracking visits to your site, copy and paste the following code snippet into the <code>&lt;head&gt;</code> of your HTML files for your site.</p>
+<pre>
+&lt;script type=&quot;text/javascript&quot;&gt;
+  var startTime = new Date();
+  window.onbeforeunload = function(){
+    var endTime = new Date();        
+    var duration = Math.abs(endTime - startTime);    
+    var xhr = new XMLHttpRequest();
+    var currentUrl = window.location.href;
+    var url = &quot;http://warm-beach-8795.herokuapp.com/sites/<%= @site.id %>/visits?pageUrl=&quot;+currentUrl+&quot;&amp;duration=&quot;+duration;
+    xhr.open(&quot;GET&quot;,url,false);
+    xhr.send();
+  }
+&lt;/script&gt;
+</pre>
 
-<p>
-  <b>Total Visits:</b>
-  <%= @site.totalvisits %>
-</p>
-
-<p>
-  <b>Average Duration:</b>
-  <%= @site.avgduration %>
-</p>
-
-
-<%= link_to 'Edit', edit_site_path(@site) %> |
 <%= link_to 'Back', sites_path %>
