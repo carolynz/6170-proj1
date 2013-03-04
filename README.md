@@ -1,25 +1,14 @@
 Project 1: Web Analytics
 ========================
+6.170 Software Studio
+Prof. Daniel Jackson
+Spring 2013
 
-###Heroku URL
+Deliverables
+------------
+Minimum requirements:
+- Page-specific data: your service should be able to track visits to individual pages in a site.
+- JavaScript snippet: you should provide a JavaScript snippet that can be inserted into any webpage to notify the service of visits automatically.
+- Visit duration: your service should track the average visit duration for each page that it tracks.
 
-http://warm-beach-8795.herokuapp.com/sites
-
-###Notes
-
-Please don't hit your browser's back button on the /visits pages; use the "Back" link instead. The count will not increment otherwise!
-
-###Code Deliverables
-
-Your code should be a rails project located at the root of this repository. To
-create a new rails project, run
-
-    >> rails new .
-
-in this directory.
-
-
-###PDF Deliverables
-
-Additional deliverables, such as the problem-analysis and the design-analysis, should
-be saved as PDF files in the directory called "deliverables"
+Assignment details: https://stellar.mit.edu/S/course/6/sp13/6.170/courseMaterial/topics/topic2/project/text/text
