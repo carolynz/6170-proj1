@@ -1,10 +1,8 @@
 Project 1: Web Analytics
 ========================
-6.170 Software Studio
-
-Prof. Daniel Jackson
-
-Spring 2013
+6.170 Software Studio  
+Prof. Daniel Jackson  
+Spring 2013  
 
 Deliverables
 ------------
